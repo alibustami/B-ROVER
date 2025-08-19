@@ -23,6 +23,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
 install(PROGRAMS
   brover_control/bridge.py
   brover_control/encoder_mapping.py
+  brover_control/px4_control.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
