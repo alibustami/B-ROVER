@@ -1,11 +1,11 @@
 [submodule "dev_ws/src/px4_msgs"]
-    path = dev_ws/src/px4_msgs
-    url = https://github.com/jomidokunMain/px4_msgs.git
+	path = dev_ws/src/px4_msgs
+	url = https://github.com/jomidokunMain/px4_msgs.git
 
 [submodule "dev_ws/src/ydlidar_ros2_driver"]
-    path = dev_ws/src/ydlidar_ros2_driver
-    url = https://github.com/YDLIDAR/ydlidar_ros2_driver.git
+	path = dev_ws/src/ydlidar_ros2_driver
+	url = https://github.com/YDLIDAR/ydlidar_ros2_driver.git
 
 [submodule "dev_ws/src/ackdrive_px4_mrover"]
-    path = dev_ws/src/ackdrive_px4_mrover
-    url = https://github.com/jomidokunMain/ackdrive_px4_mrover.git
+	path = dev_ws/src/ackdrive_px4_mrover
+	url = https://github.com/jomidokunMain/ackdrive_px4_mrover.git
