@@ -25,7 +25,7 @@ repos:
         name: "Flake8 linting"
         language: system
         types: [file, python]
-        entry: flake8
+        entry: python3 -m flake8
 
   - repo: https://github.com/pocc/pre-commit-hooks
     rev: v1.3.5
