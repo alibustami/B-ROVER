@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="mobile_base">
   <xacro:property name="chassis_length" value="0.91"/>
   <!--36 in-->
   <xacro:property name="chassis_width" value="0.62"/>
@@ -9,6 +9,7 @@
   <xacro:property name="wheel_width" value="0.12"/>
   <xacro:property name="lidar_length" value="0.12"/>
   <xacro:property name="lidar_radius" value="0.12"/>
+  <xacro:property name="deg_to_rad" value="0.0174533"/>
 
   <link name="base_footprint"/>
 
@@ -77,10 +78,34 @@
     </joint>
   </xacro:macro>
 
-  <xacro:wheel_joint side="right" position="front"/>
+  <!-- <xacro:wheel_joint side="right" position="front"/> -->
   <xacro:wheel_joint side="right" position="back"/>
-  <xacro:wheel_joint side="left" position="front"/>
+  <!-- <xacro:wheel_joint side="left" position="front"/> -->
   <xacro:wheel_joint side="left" position="back"/>
+
+  <xacro:macro name="steer_assembly" params="side">
+    <link name="${side}_steer_link"/>
+
+    <joint name="${side}_steer_joint" type="revolute">
+      <parent link="base_link"/>
+      <child link="${side}_steer_link"/>
+      <origin xyz="${0.5 * chassis_length}
+                 ${(0.5 * chassis_width) if side == 'left' else (-0.5 * chassis_width)}
+                 ${-0.5 * chassis_height}" rpy="0 0 0"/>
+      <axis xyz="0 0 1"/>
+      <limit lower="${-22.5 * deg_to_rad}" upper="${22.5 * deg_to_rad}" effort="5000" velocity="50"/>
+    </joint>
+
+    <joint name="${side}_front_wheel_joint" type="continuous">
+      <parent link="${side}_steer_link"/>
+      <child link="${side}_front_wheel_link"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <axis xyz="0 1 0"/>
+    </joint>
+  </xacro:macro>
+
+  <xacro:steer_assembly side="left"/>
+  <xacro:steer_assembly side="right"/>
 
   <joint name="laser_joint" type="fixed">
     <parent link="base_link"/>
