@@ -46,9 +46,9 @@ class PX4Controller(Node):
         )
 
         qos_profile = QoSProfile(
-            reliability=QoSReliabilityPolicy,
-            durability=QoSDurabilityPolicy,
-            history=QoSHistoryPolicy,
+            reliability=QoSReliabilityPolicy.BEST_EFFORT,
+            durability=QoSDurabilityPolicy.TRANSIENT_LOCAL,
+            history=QoSHistoryPolicy.KEEP_LAST,
             depth=10,
         )
 
@@ -67,7 +67,7 @@ class PX4Controller(Node):
         )
 
         self.joy_subscriber = self.create_subscription(
-            Joy, "/joy", self.joy_callback
+            Joy, "/joy", self.joy_callback, 10
         )
 
         self.send_command_timer = self.create_timer(0.1, self.send_command)
@@ -79,11 +79,11 @@ class PX4Controller(Node):
         self.roll = self.pitch = self.yaw = self.throttle = 0.0
 
     def joy_callback(self, msg):
-        self.set_controls(
+        self.set_control(
             roll=-msg.axes[3],
             pitch=msg.axes[0],
             yaw=msg.axes[4],
-            throttle=msg.axes[1],
+            throttle=(msg.axes[1]),
         )
 
         self.joystick_state = msg.buttons
@@ -114,6 +114,7 @@ class PX4Controller(Node):
         msg_mc.yaw = self.yaw
         msg_mc.throttle = self.throttle
         msg_mc.yaw = self.yaw
+        msg_mc.valid = True
 
         self.manual_control_publisher.publish(msg_mc)
 
@@ -125,24 +126,24 @@ class PX4Controller(Node):
             command = 400
             param1 = 1.0  # arm
             self.publish_vehicle_command(command, param1)
-            self.get_logger().info("Arming the vehicle ...")
+            # self.get_logger().info("Arming the vehicle ...")
         elif self.current_mode == "DISARM":
             command = 400
             param1 = 0.0  # disarm
             self.publish_vehicle_command(command, param1)
-            self.get_logger().info("Disarming the vehicle ...")
+            # self.get_logger().info("Disarming the vehicle ...")
         elif self.current_mode == "OFFBOARD":
             command = 176
             param1 = 1.0  # custom mode flag for offboard
             param2 = 6.0  # offboard
             self.publish_vehicle_command(command, param1, param2)
-            self.get_logger().info("Switching to OFFBOARD mode ...")
+            # self.get_logger().info("Switching to OFFBOARD mode ...")
         elif self.current_mode == "MANUAL":
             command = 176
             param1 = 1.0  # custom mode flag for manual
             param2 = 1.0  # manual
             self.publish_vehicle_command(command, param1, param2)
-            self.get_logger().info("Switching to MANUAL mode ...")
+            # self.get_logger().info("Switching to MANUAL mode ...")
 
     def publish_vehicle_command(self, command, param1=0.0, param2=0.0):
         msg = VehicleCommand()

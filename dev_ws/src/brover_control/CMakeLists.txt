@@ -24,7 +24,24 @@ install(PROGRAMS
   brover_control/bridge.py
   brover_control/encoder_mapping.py
   brover_control/px4_control.py
+  brover_control/odom_pub.py
+  brover_control/utils.py
   DESTINATION lib/${PROJECT_NAME}
+)
+
+# Install launch files
+install(DIRECTORY
+  launch/
+  DESTINATION share/${PROJECT_NAME}/
+)
+
+# Install config files (if any)
+install(DIRECTORY
+  config/
+  DESTINATION share/${PROJECT_NAME}/
+  FILES_MATCHING PATTERN "*.yaml"
+  PATTERN "*.yml"
+  PATTERN "*.xml"
 )
 
 # Export runtime deps so others can import brover_control.msg

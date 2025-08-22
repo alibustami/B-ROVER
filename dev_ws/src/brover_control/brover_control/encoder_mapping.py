@@ -27,11 +27,14 @@ class EncoderMapping(Node):
         self.last_time = self.get_clock().now()
 
         self.rover_control_subscriber = self.create_subscription(
-            Control, "rover_control", self.rover_control_callback, 30
+            Control, "/rover_control", self.rover_control_callback, 30
         )
         self.encoder_publisher = self.create_publisher(
             Float32MultiArray, "encoder_values", 30
         )
+
+        self.traction_position = 0.0
+        self.steering_position = 0.0
 
     @staticmethod
     def clamp(x, lo, hi):
